@@ -35,7 +35,7 @@ public class Flight {
 	}
 
 	public void setAirline(String airline) {
-		airline = airline;
+		this.airline = airline;
 	}
 
 	public LocalDate getDate() {
