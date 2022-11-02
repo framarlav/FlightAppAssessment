@@ -1,14 +1,21 @@
 package com.assessment.flight.flight.assessment;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
+
+import com.assessment.flight.flight.assessment.flights.FlightController;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -21,7 +28,7 @@ class ApplicationTests {
 
 	@Test
 	void getAllFlights() {
-		Assert.assertNotNull(FlightController.AvailableFlights());
+		Assert.notNull(FlightController.AvailableFlights());
 	}
 	
 	@Test
@@ -42,7 +49,7 @@ class ApplicationTests {
 		String origin = "Sevilla";
 		String destination = "Madrid";
 		
-		Assert.assertNotNull(FlightController.availableFlightsFromACityAndDate(date, origin, destination));
+		Assertions.assertNotNull(FlightController.availableFlightsFromACityAndDate(date, origin, destination));
 	}
 	
 	@Test
@@ -60,21 +67,34 @@ class ApplicationTests {
 	
 	@Test
 	void bookSeat() {
-		Assert.fail(FlightController.reservaAsiento(125), "No se ha encontrado ese vuelo");
+		try{
+			FlightController.reservaAsiento(125L);
+		}catch(Exception e) {
+			fail("No existe ese vuelo.");
+		}
 	}
 	
 	@Test
 	void getFlights_givenOrigin() {
-		Assert.fail(FlightController.getVuelosSegunOrigen("Valencia"), "No existe ese destino");
+		try{
+			FlightController.getVuelosSegunOrigen("Valencia");
+		}catch(Exception e) {
+			fail("No existe ese destino.");
+		}
 	}
 	
 	@Test
 	void getDestinations_givenOrigin() {
 		String origin = "Sevilla";
-		String[] possibleDestinations = {"Madrid", "Paris", "Berlin", "Barcelona"};
+		String[] otherDestinations = {"Madrid", "Paris", "Berlin", "Barcelona"};
+		List<String> possibleDestinations = new ArrayList<>();
+		for(int i  = 0; i < otherDestinations.length; i++) {
+			possibleDestinations.add(otherDestinations[i]);
+		}
 		
-		Assert.isEsqual(getDestinosSegunOrigen("Sevilla"), possibleDestinations);
+		assertThat(FlightController.getDestinosSegunOrigen(origin).equals(possibleDestinations));
 	}
 	
 	
 }
+
