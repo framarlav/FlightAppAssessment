@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
 
 public interface FlightRepository extends JpaRepository<Flight, Long>{
 	
-	//public  List<Flight> getByDate(LocalDate date, String origin, String destination) ;
 	
 }

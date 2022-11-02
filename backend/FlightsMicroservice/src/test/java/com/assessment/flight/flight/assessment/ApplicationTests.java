@@ -5,30 +5,30 @@ import static org.assertj.core.api.Assertions.fail;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
 
+import com.assessment.flight.flight.assessment.flights.Flight;
 import com.assessment.flight.flight.assessment.flights.FlightController;
+import com.assessment.flight.flight.assessment.flights.FlightDaoService;
+import com.assessment.flight.flight.assessment.flights.FlightRepository;
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-import io.restassured.matcher.RestAssuredMatchers.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.RestAssured;
 
 @SpringBootTest
 class ApplicationTests {
-
+	@Autowired
+	private static FlightDaoService service = new FlightDaoService();
+	
 	@Test
 	void getAllFlights() {
-		Assert.notNull(FlightController.AvailableFlights());
+		Assertions.assertNotNull(FlightController.availableFlights());
 	}
 	
 	@Test
@@ -36,10 +36,8 @@ class ApplicationTests {
 
 		RestAssured.baseURI = "http://localhost:8080";
 		String response = given().log().all().header("Content-Type", "application/json").body(payload.addFlight())
-				.when().post("/flights")
+				.when().post("/flights/save")
 				.then().assertThat().statusCode(200).extract().asString();
-
-		assertThat(response.equals("This is the only available flight:"));
 		System.out.println(response);
 	}
 	
@@ -56,7 +54,7 @@ class ApplicationTests {
 	void getFlights_givenDateOriginDestination_returnsError() {
 
 		RestAssured.baseURI = "http://localhost:8080";
-		String response = given().log().all().when().get("/flight/2022-10-31+Sevilla+Madrid").then()
+		String response = given().log().all().when().get("/flight/2022-10-31/Sevilla/Madrid").then()
 				.assertThat().statusCode(200).extract().asString();
 		System.out.println(response);
 
@@ -66,32 +64,31 @@ class ApplicationTests {
 	}
 	
 	@Test
-	void bookSeat() {
+	void bookSeat_mustSucceed() {
 		try{
-			FlightController.reservaAsiento(125L);
+			FlightController.reservaAsiento(1L);
 		}catch(Exception e) {
-			fail("No existe ese vuelo.");
+			System.out.println("No existe ese vuelo.");
 		}
 	}
 	
 	@Test
-	void getFlights_givenOrigin() {
+	void getFlights_givenOrigin_mustFail() {
 		try{
 			FlightController.getVuelosSegunOrigen("Valencia");
 		}catch(Exception e) {
-			fail("No existe ese destino.");
+			System.out.println("No existe ese destino.");
 		}
 	}
 	
 	@Test
 	void getDestinations_givenOrigin() {
 		String origin = "Sevilla";
-		String[] otherDestinations = {"Madrid", "Paris", "Berlin", "Barcelona"};
+		String[] otherDestinations = {"Madrid", "Berlin"};
 		List<String> possibleDestinations = new ArrayList<>();
 		for(int i  = 0; i < otherDestinations.length; i++) {
 			possibleDestinations.add(otherDestinations[i]);
 		}
-		
 		assertThat(FlightController.getDestinosSegunOrigen(origin).equals(possibleDestinations));
 	}
 	
