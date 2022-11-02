@@ -56,17 +56,19 @@ public class FlightController{
 	@GetMapping ("/flights/{origin}")
 	public static List<Flight> getVuelosSegunOrigen(@PathVariable String origin){
 		List<Flight> vuelos = repository.findAll();
-		System.out.println(vuelos);
 		List<Flight> destinos = new ArrayList<>();
 		if(vuelos!=null) {
 			for(Flight vuelo : vuelos) {
-				if(vuelo.getOrigin() == origin) destinos.add(vuelo);
+				System.out.println(origin);
+				if(vuelo.getOrigin().equals(origin)) destinos.add(vuelo);
 			}
+			return destinos;
 		}
+		System.out.println("DESTINOS" + destinos);
 		return destinos;
 	}
 	
-	@GetMapping ("/flights/{destinations}")
+	@GetMapping ("/flights/destinations/{destinations}")
 	public static List<String> getDestinosSegunOrigen(@PathVariable String origin){
 		List<Flight> vuelos = repository.findAll();
 		List<String> destinos = new ArrayList<>();
