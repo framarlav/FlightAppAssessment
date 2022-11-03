@@ -44,6 +44,31 @@ public class FlightController{
 		return null;
 	}
 	
+	//GetDestinations3daysbeforeandafter
+	@GetMapping ("/flights/destinations/possibleFlights/{date}/{origin}/{destination}")
+	public static List<Flight> getFlights_daysBeforeAndAfter_andActual(@PathVariable LocalDate date, @PathVariable String origin, @PathVariable String destination){
+		List<Flight> flights = new ArrayList<>();
+		List<Flight> newFlights = new ArrayList<>();	
+		date = date.minusDays(3);
+		for(int i = 7; i > 0; i--) {
+			if(i == 0 && i<3) {
+				flights = availableFlightsFromACityAndDate(date, origin, destination);
+				newFlights.addAll(flights);
+			}
+			if(i == 3) {
+				flights = availableFlightsFromACityAndDate(date, origin, destination);
+				newFlights.addAll(flights);
+			}
+			if(i>3 && i<=7) {
+				flights = availableFlightsFromACityAndDate(date, origin, destination);
+				newFlights.addAll(flights);
+			}
+			date = date.plusDays(1);
+		}
+			
+		return newFlights;
+	}
+	
 	//Metodo restar asiento
 	@PutMapping ("/flight/reserva/{id}")
 	public static void reservaAsiento(@PathVariable Long id) {
@@ -73,7 +98,6 @@ public class FlightController{
 		List<Flight> vuelos = repository.findAll();
 		List<String> destinos = new ArrayList<>();
 		for(Flight vuelo : vuelos) {
-			//if(!vuelo.getOrigin().equals(destinations) && !destinos.contains(vuelo.getDestination())) destinos.add(vuelo.getDestination());
 			if(vuelo.getOrigin().equals(destinations) && !destinos.contains(vuelo.getDestination())) destinos.add(vuelo.getDestination());
 		}
 		return destinos;
