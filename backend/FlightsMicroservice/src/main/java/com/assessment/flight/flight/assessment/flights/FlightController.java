@@ -73,7 +73,8 @@ public class FlightController{
 		List<Flight> vuelos = repository.findAll();
 		List<String> destinos = new ArrayList<>();
 		for(Flight vuelo : vuelos) {
-			if(vuelo.getOrigin().equals(destinations)) destinos.add(vuelo.getDestination());
+			//if(!vuelo.getOrigin().equals(destinations) && !destinos.contains(vuelo.getDestination())) destinos.add(vuelo.getDestination());
+			if(vuelo.getOrigin().equals(destinations) && !destinos.contains(vuelo.getDestination())) destinos.add(vuelo.getDestination());
 		}
 		return destinos;
 	}

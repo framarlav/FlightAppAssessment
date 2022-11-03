@@ -36,7 +36,7 @@ public class LoadDatabase {
 		places.add("Sevilla");
 		places.add("Madrid");
 		places.add("Paris");
-		places.add("Berlín");
+		places.add("Berlin");
 		places.add("Barcelona");
 		
 		List<String> airlines = new ArrayList<>();
@@ -55,11 +55,10 @@ public class LoadDatabase {
 			for(int j = 0; j < 3; j++) {
 				randomAirline = airlines.get(rand.nextInt(airlines.size()));
 				randomOrigin = places.get(rand.nextInt(places.size()));
-				randomDestination = places.get(rand.nextInt(places.size()));
 				randomBoolean = new Random().nextBoolean();
-				if(randomOrigin.equals(randomDestination)) {
-					randomDestination = places.get((int) Math.random() * (5 - 1));
-				}
+				do {
+					randomDestination = places.get(rand.nextInt(places.size()));
+				}while(randomOrigin.equals(randomDestination));
  				response.add(new Flight(randomAirline, date, randomOrigin, randomDestination, null, randomBoolean));
 			}
 			date = date.plusDays(1);
