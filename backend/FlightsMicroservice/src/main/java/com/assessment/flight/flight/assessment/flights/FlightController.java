@@ -44,6 +44,16 @@ public class FlightController{
 		return null;
 	}
 	
+	//Metodo para devolver los vuelos en una fecha y determinada aerolinea
+		@GetMapping ("/flight/{date}/{origin}/{destination}/{airline}")
+		public static List<Flight> availableFlightsFromACityDateAndAirlien
+		(@PathVariable LocalDate date, @PathVariable String origin, @PathVariable String destination, @PathVariable String airline) {
+			if(repository.findAll()!=null) {
+				return FlightDaoService.getByDateAndAirline(repository.findAll(), date, origin, destination, airline);
+			}
+			return null;
+		}
+	
 	//GetDestinations3daysbeforeandafter
 	@GetMapping ("/flights/destinations/possibleFlights/{date}/{origin}/{destination}")
 	public static List<Flight> getFlights_daysBeforeAndAfter_andActual(@PathVariable LocalDate date, @PathVariable String origin, @PathVariable String destination){

@@ -18,6 +18,7 @@ public class Flight {
 	private List<String> scales;
 	private Boolean luggage;
 	private int numAsientos = 150;
+	private int precio = 80;
 	
 	public Flight() {}
 	
@@ -86,11 +87,6 @@ public class Flight {
 		this.destination = destination;
 	}
 	
-	@Override
-	public String toString() {
-		return "Flight [Airline=" + airline + ", date=" + date + ", scales=" + scales + ", luggage=" + luggage + "]";
-	}
-
 	public int getNumAsientos() {
 		return numAsientos;
 	}
@@ -101,6 +97,21 @@ public class Flight {
 	
 	public void cogeAsiento() {
 		this.numAsientos--;
+	}
+
+	public int getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(int precio) {
+		this.precio = precio;
+	}
+
+	@Override
+	public String toString() {
+		return "Flight [id=" + id + ", airline=" + airline + ", date=" + date + ", origin=" + origin + ", destination="
+				+ destination + ", scales=" + scales + ", luggage=" + luggage + ", numAsientos=" + numAsientos
+				+ ", precio=" + precio + "]";
 	}
 	
 }
