@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { GiWindsock } from "react-icons/gi";
+import { Link, Navigate, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import Payment from "./Payment";
 
+
 const BookingData = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     //Objecto Booking que se le va a pasar a BookingAPI
     firstName: "",
@@ -11,7 +14,7 @@ const BookingData = () => {
     nationality: "",
     age: 0,
     price: 750.0,
-    id_flight: 10,
+    id_flight: 1,
   });
   const location = useLocation();
 
@@ -21,14 +24,31 @@ const BookingData = () => {
       .then((result) => (formData.price = result))
       .catch((error) => console.log("error", error));
   };
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const bookSeat = () => {
+    fetch("http://localhost:8082/booking", {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify({formData}),
+    })
+    .then(response => response.text())
+    .then(result => alert(result))
+    .catch(error => console.log('error', error))};
+
 
   return (
     <React.Fragment>
       <section>
         <form
           onSubmit={(event) => {
-            console.log(formData);
+            formData.id_flight=location.state.id;
             changeSeats();
+            bookSeat();
+            alert("Has bookeado correctamente");
+            event.preventDefault();
+            navigate("/");
           }}
         >
           <div className="bg-white w-auto h-auto pb-10 mt-5 mx-5 px-5 rounded-lg sm:w-full md:w-4/5 md:mx-auto lg:w-2/5 lg:mx-auto">
