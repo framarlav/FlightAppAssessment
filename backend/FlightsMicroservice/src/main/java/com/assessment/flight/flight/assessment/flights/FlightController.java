@@ -80,11 +80,17 @@ public class FlightController{
 	}
 	
 	//Metodo restar asiento
-	@PutMapping ("/flight/reserva/{id}")
+	//This would be the way to do this method with PUT but it doesn`t allow me to do the fetch in frontend
+	/*@PutMapping ("/flight/{id}")
 	public static void reservaAsiento(@PathVariable Long id) {
 		Optional<Flight> myFlight = repository.findById(id);
-		if(myFlight!=null) myFlight.get().cogeAsiento();	
-		System.out.println(myFlight.get().getNumAsientos());
+		if(myFlight!=null) myFlight.get().cogeAsiento();
+	}*/
+	@GetMapping ("/flight/reserva/{id}")
+	public static void reservaAsiento(@PathVariable Long id) {
+		Optional<Flight> myFlight = repository.findById(id);
+		if(myFlight!=null) myFlight.get().cogeAsiento();
+		repository.save(myFlight.get(), id);
 	}
 	
 	//Get flights from origin
@@ -119,7 +125,5 @@ public class FlightController{
 			return "Booking made successfully.";
 		else
 			return "Booking made failed.";
-	}
-	
-	
+	}	
 }
