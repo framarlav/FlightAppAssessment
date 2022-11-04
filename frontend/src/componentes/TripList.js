@@ -4,25 +4,12 @@ import Card from './Card';
 
 
 const TripList = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
-    const tripType = searchParams.get("tripType");
-    // let tripType = searchParams.get("tripType");
-    // let departure = searchParams.get("departure");
-    // let arrival = searchParams.get("arrival");
-    // let departureDate = searchParams.get("departureDate");
-    // let returnDate = searchParams.get("returnDate");
-    // let adult = searchParams.get("adult");
-    // let children0 = searchParams.get("children0");
-    // let children2 = searchParams.get("children2");
-    // let children9 = searchParams.get("children9");
-    // let airline = searchParams.get("airline");
     
     const [props, setProps] = useState();
     const [newPrecio, setNewPrecio] = useState();
     useEffect(() => {
         api();
-        //api2();
       }, []);
 
     const api = async () => {
@@ -32,30 +19,25 @@ const TripList = () => {
             setProps(data);
         }
     }; 
-    const variables = [80, Number(location.state.children0), Number(location.state.children2), Number(location.state.children9)];
-    useEffect(() => {
-        async function setNewMoney() {
-            const requestOptions = {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(variables)
-            };
-            const response = await fetch('http://localhost:8081/price', requestOptions);
-            const data = await response.json();
-            if(typeof data!="undefined"){
-                setNewPrecio(JSON.parse(data));
-                console.log(data);
-            }
+    const variable = [80, Number(location.state.children0), Number(location.state.children2), Number(location.state.children9)];
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const url = "http://localhost:8081/price/" + variable[0] + "/" + variable[1] + "/" + variable[2] + "/" + variable[3];
+    
+    if(typeof props != "undefined"){
+        fetch(url)
+            .then(response => response.text())
+            .then(result => setNewPrecio(result))
+            .catch(error => console.log('error', error));
+
+            //props.precio = newPrecio;
+            console.log(newPrecio);
+            props[0].precio = newPrecio;
+            return(
+                <div>
+                    <Card props={props}/>
+                </div>
+            )
         }
-       setNewMoney();
-    }, []);
-
-    console.log(newPrecio);
-
-    return(
-        <div>
-            <Card props={props}/>
-        </div>
-    )
-}
+    }
 export default TripList;

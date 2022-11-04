@@ -13,7 +13,6 @@ import styles from './Card.modules.css';
 export default function Card(props){
   if(typeof props.props!="undefined"){
     props = props.props[0];
-  }
   return (
     <MDBCard styles={styles} alignment='center'>
     <MDBCardHeader>Vuelo nº {props.airline} {props.id} </MDBCardHeader>
@@ -26,5 +25,10 @@ export default function Card(props){
     <MDBCardFooter className='text-muted'>Free Seats: {props.numAsientos}</MDBCardFooter>
   </MDBCard>
   );
+}else{
+  return (
+    null
+  );
+}
 }
 

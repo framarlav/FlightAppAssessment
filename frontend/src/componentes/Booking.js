@@ -49,8 +49,6 @@ const Booking = () => {
     event.preventDefault();
     navigate("/trips", {state:formData});
   };
-
-  console.log(formData);
   return (
     <React.Fragment>
       <section>
@@ -62,8 +60,6 @@ const Booking = () => {
           <div className="bg-white w-auto h-auto pb-10 mt-5 mx-5 px-5 rounded-lg sm:w-full md:w-4/5 md:mx-auto lg:w-2/5 lg:mx-auto">
             {
               /* header section */
-
-              console.log(destinationsReceived)
             }
             <div className="h-24 flex justify-center items-center shadow ">
               <p className="uppercase font-bold text-4xl text-center">
