@@ -16,9 +16,10 @@ public class BookingController {
 	BookingController(BookingRepository repository) {
 		this.repository = repository;
 	}
-
+	
 	@PostMapping("/booking")
 	public String bookFlight(@RequestBody Booking booking) {
+		System.out.println(booking);
 		if (booking == repository.save(booking))
 			return "Booking made successfully.";
 		else

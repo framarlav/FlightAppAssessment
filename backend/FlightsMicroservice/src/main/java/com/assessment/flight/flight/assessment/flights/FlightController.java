@@ -89,8 +89,10 @@ public class FlightController{
 	@GetMapping ("/flight/reserva/{id}")
 	public static void reservaAsiento(@PathVariable Long id) {
 		Optional<Flight> myFlight = repository.findById(id);
-		if(myFlight!=null) myFlight.get().cogeAsiento();
-		repository.save(myFlight.get(), id);
+		if(myFlight!=null) {
+			myFlight.get().cogeAsiento();
+			repository.save(myFlight.get());
+		}
 	}
 	
 	//Get flights from origin

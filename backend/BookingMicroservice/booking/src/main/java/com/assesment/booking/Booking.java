@@ -14,7 +14,7 @@ public class Booking {
 	private int age;
 	private float price;
 	private Long id_flight;
-
+	
 	public Booking() {}
 	public Booking(String name, String surname, String nationality, String identification, int age, float price,
 			Long id_flight) {
